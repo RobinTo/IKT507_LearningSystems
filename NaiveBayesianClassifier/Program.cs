@@ -9,6 +9,11 @@ namespace NaiveBayesianClassifier
     {
         static void Main(string[] args)
         {
+            Dictionary<string, Dictionary<string, int>> dataSet = new Dictionary<string, Dictionary<string, int>>();
+
+            dataSet = DataReader.ReadFiles();
+
+            //dataAnalyzer.Analyze("filnavn", dataSet);
         }
     }
 }
