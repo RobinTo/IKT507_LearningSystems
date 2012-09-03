@@ -1,0 +1,19 @@
+﻿Temporary notes
+
+The program is supposed to:
+
+- Read all the documents
+- Collect all words for every document, so that each document is represented by a vector of words
+- Put every document in the proper category
+
+Calcuate the probability for which category a new document belongs to:
+- Fetch the new document
+- Collect all words from document into a Dictionary<String,int>
+- 
+
+DataAnalyzer
+
+P(h)   = 
+P(o)   = 
+P(h|o) = 
+P(o|h) = 
