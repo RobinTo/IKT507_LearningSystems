@@ -32,27 +32,7 @@ namespace NaiveBayesianClassifier
 
                 foreach (string filePath in files)
                 {
-                    string fileContent = File.ReadAllText(filePath);
-                    Regex rgx = new Regex("[^a-zA-Z0-9-]");
-                    fileContent = rgx.Replace(fileContent, ".");
-                    string[] wordsInFile = fileContent.Split('.');
-
-                    foreach (string word in wordsInFile)
-                    {
-                        if (wordsInCategory.ContainsKey(word))
-                        {
-                            wordsInCategory[word] = wordsInCategory[word] + 1;
-                        }
-                        else
-                        {
-                            wordsInCategory[word] = 1;
-                        }
-                    }
-
-                }
-                if (wordsInCategory.ContainsKey(""))
-                {
-                    wordsInCategory.Remove("");
+                    wordsInCategory = ReturnWordCountFromFile(filePath, wordsInCategory);
                 }
 
                 dataSet[strippedCategories[t]] = wordsInCategory;
@@ -60,6 +40,33 @@ namespace NaiveBayesianClassifier
             
 
             return dataSet;
+        }
+
+        public static Dictionary<string, int> ReturnWordCountFromFile(string filePath, Dictionary<string, int> wordsInCategory)
+        {
+            string fileContent = File.ReadAllText(filePath);
+            Regex rgx = new Regex("[^a-zA-Z0-9-]");
+            fileContent = rgx.Replace(fileContent, ".");
+            string[] wordsInFile = fileContent.Split('.');
+
+            foreach (string word in wordsInFile)
+            {
+                if (wordsInCategory.ContainsKey(word))
+                {
+                    wordsInCategory[word] = wordsInCategory[word] + 1;
+                }
+                else
+                {
+                    wordsInCategory[word] = 1;
+                }
+            }
+
+            if (wordsInCategory.ContainsKey(""))
+            {
+                wordsInCategory.Remove("");
+            }
+
+            return wordsInCategory;
         }
 
     }
