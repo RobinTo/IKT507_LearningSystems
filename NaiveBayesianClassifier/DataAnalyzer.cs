@@ -11,7 +11,7 @@ namespace NaiveBayesianClassifier
         public string Analyze(String filename, Dictionary<String, Dictionary<String, int>> dataset)
         {
             // Fetch file, parse it and wordify it as a Dictionary
-            Dictionary<String, int> candidateDocument = this.ReadData(filename);
+            Dictionary<String, int> candidateDocument = DataReader.ReturnWordCountFromFile(filename);
 
             // Determine which category it belongs to, and calculate the probability for this
             String results = this.CalculateCategory(candidateDocument, dataset);
@@ -19,30 +19,22 @@ namespace NaiveBayesianClassifier
             return results;
         }
 
-        private Dictionary<String, int> ReadData(String filename)
-        {
-            // Read the file and parse it to a string
-            StreamReader streamReader = new StreamReader(filename);
-            string input = streamReader.ReadToEnd();
-            streamReader.Close();
-
-            // Separate each word in the string, and put it into the proper category
-            Dictionary<String, int> candidateDocument = new Dictionary<String, int>();
-            
-            /*
-            for (int counter = 0; counter < input.)
-            {
-
-            }
-            */
-            return candidateDocument;
-        }
-
         private String CalculateCategory(Dictionary<String, int> candidateDocument, Dictionary<String, Dictionary<String, int>> dataset)
         {
-            // Do Magic
 
-
+            //Python code from the lecture.
+            /*# Finds group with max P(O | H) * P(H)
+            max_group = 0
+            max_p = 1
+            for candidate_group in posts.keys():
+            # Calculates P(O | H) * P(H) for candidate group
+            p = math.log(p_group[candidate_group])
+            for word in post_to_be_classified:
+            if vocabulary.has_key(word):
+            p += math.log(p_word_given_group[candidate_group][word])
+            if p > max_p or max_p == 1:
+            max_p = p
+            max_group = candidate_group*/
 
             return "Category, XX % Probability";
         }
