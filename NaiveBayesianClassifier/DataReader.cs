@@ -75,7 +75,7 @@ namespace NaiveBayesianClassifier
         public static Dictionary<string, int> ReturnWordCountFromFile(string filePath)
         {
             Dictionary<string, int> wordsInCategory = new Dictionary<string, int>();
-            string fileContent = File.ReadAllText(filePath);
+            string fileContent = File.ReadAllText(filePath).ToLower();
             Regex rgx = new Regex("[^a-zA-Z0-9-]");
             fileContent = rgx.Replace(fileContent, ".");
             string[] wordsInFile = fileContent.Split('.');
