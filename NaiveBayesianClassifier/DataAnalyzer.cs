@@ -21,8 +21,30 @@ namespace NaiveBayesianClassifier
 
         private String CalculateCategory(Dictionary<String, int> candidateDocument, Dictionary<String, Dictionary<String, int>> dataset)
         {
+            double ph = 
+
+
+
+
 
             //Python code from the lecture.
+
+            /*# Calculates P(O | H)
+            p_word_given_group = {}
+            for group in posts.keys():
+            p_word_given_group[group] = {}
+            # Counts the number of words
+            for word in vocabulary.keys():
+            p_word_given_group[group][word] = 1.0
+            for word in posts[group]:
+            if vocabulary.has_key(word):
+            p_word_given_group[group][word] += 1.0
+            # Calculates probabilities
+            for word in vocabulary.keys():
+            p_word_given_group[group][word] /= len(posts[group]) +
+            len(vocabulary) */
+
+            
             /*# Finds group with max P(O | H) * P(H)
             max_group = 0
             max_p = 1

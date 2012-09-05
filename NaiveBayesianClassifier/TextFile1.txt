@@ -16,4 +16,33 @@ DataAnalyzer
 P(h)   = 
 P(o)   = 
 P(h|o) = 
-P(o|h) = 
+P(o|h) =
+
+
+"Hvordan har du det du?" (5 ord totalt)
+Hvordan: 1
+Har: 1
+Du: 2
+Det: 1
+
+
+Dataset(Category1): (Totalt 100 ord)
+Hvordan: 10
+Har: 10
+Du: 40
+Det: 15
+Miss: 5
+Kaviar: 20
+
+Dataset(Category2): (Totalt 5 ord)
+Hvordan: 1
+Har: 1
+Du: 2
+Det: 1
+
+
+P1(o|h) = 1+1/105
+
+P2(o|h) = 1+1/9 * 1+1/9 * 2+1/9 * 2+1/9 * 1+1/9
+
+P1(o1|h1) = 1+1 / 5 + 100
