@@ -13,19 +13,19 @@ namespace NaiveBayesianClassifier
         {
             Dictionary<string, Dictionary<string, int>> dataSet = new Dictionary<string, Dictionary<string, int>>();
 
-            
+
             string[] categories = Directory.GetDirectories(Directory.GetCurrentDirectory() + "..\\..\\..\\20_newsgroups");
             string[] strippedCategories = new string[categories.Length];
 
             int i = 0;
             foreach (string category in categories)
             {
-                string strippedCategory = category.Substring(category.LastIndexOf('\\')+1, category.Length - 1 - category.LastIndexOf('\\'));
+                string strippedCategory = category.Substring(category.LastIndexOf('\\') + 1, category.Length - 1 - category.LastIndexOf('\\'));
                 strippedCategories[i] = strippedCategory;
                 i++;
             }
 
-            for(int t = 0; t < categories.Length; t++)
+            for (int t = 0; t < categories.Length; t++)
             {
                 Dictionary<string, int> wordsInCategory = new Dictionary<string, int>();
                 string[] files = Directory.GetFiles(categories[t]);
@@ -37,7 +37,7 @@ namespace NaiveBayesianClassifier
 
                 dataSet[strippedCategories[t]] = wordsInCategory;
             }
-            
+
 
             return dataSet;
         }
@@ -46,7 +46,7 @@ namespace NaiveBayesianClassifier
         public static Dictionary<string, int> ReturnWordCountFromFile(string filePath, Dictionary<string, int> addToDictionary)
         {
             string fileContent = File.ReadAllText(filePath).ToLower();
-            
+
             Regex rgx = new Regex("[^a-zA-Z0-9-]");
             fileContent = rgx.Replace(fileContent, ".");
             string[] wordsInFile = fileContent.Split('.');
