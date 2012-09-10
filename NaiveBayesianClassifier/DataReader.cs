@@ -45,11 +45,16 @@ namespace NaiveBayesianClassifier
         // Reads words in a file and adds the count to an existing dictionary.
         public static Dictionary<string, int> ReturnWordCountFromFile(string filePath, Dictionary<string, int> addToDictionary)
         {
-            string fileContent = File.ReadAllText(filePath).ToLower();
+            string[] fileContent = File.ReadAllLines(filePath);
+            List<string> wordsInFile = new List<string>();
 
-            Regex rgx = new Regex("[^a-zA-Z0-9-]");
-            fileContent = rgx.Replace(fileContent, ".");
-            string[] wordsInFile = fileContent.Split('.');
+            char[] delimiters = new char[] { '\r', '\n', ' ' };
+            foreach (string line in fileContent)
+            {
+                string[] list = line.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+                foreach (string w in list)
+                    wordsInFile.Add(w.ToLower());
+            }
 
             foreach (string word in wordsInFile)
             {
@@ -75,10 +80,16 @@ namespace NaiveBayesianClassifier
         public static Dictionary<string, int> ReturnWordCountFromFile(string filePath)
         {
             Dictionary<string, int> wordsInCategory = new Dictionary<string, int>();
-            string fileContent = File.ReadAllText(filePath).ToLower();
-            Regex rgx = new Regex("[^a-zA-Z0-9-]");
-            fileContent = rgx.Replace(fileContent, ".");
-            string[] wordsInFile = fileContent.Split('.');
+            string[] fileContent = File.ReadAllLines(filePath);
+            List<string> wordsInFile = new List<string>();
+            
+            char[] delimiters = new char[] { '\r', '\n', ' ' };
+            foreach (string line in fileContent)
+            {
+                string[] list = line.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+                foreach (string w in list)
+                    wordsInFile.Add(w.ToLower());
+            }
 
             foreach (string word in wordsInFile)
             {

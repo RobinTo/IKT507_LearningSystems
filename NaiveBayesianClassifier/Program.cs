@@ -26,6 +26,7 @@ namespace NaiveBayesianClassifier
             Console.WriteLine("Starting to analyze standard document.");
 
             DataAnalyzer dataAnalyzer = new DataAnalyzer();
+            dataAnalyzer.calcCWWWL(data);
 
             Console.WriteLine(dataAnalyzer.Analyze(@"C:\Users\Robin\Desktop\IKT507_LearningSystems\NaiveBayesianClassifier\20_newsgroups\alt.atheism\51123", data));
 
@@ -41,6 +42,8 @@ namespace NaiveBayesianClassifier
                     done = true;
                 else if (command.ToLower() == "analyzeall")
                 {
+                    float correct = 0.0f;
+                    float wrong = 0.0f;
                     string[] categories = Directory.GetDirectories(Directory.GetCurrentDirectory() + "..\\..\\..\\20_newsgroups");
                     string[] strippedCategories = new string[categories.Length];
 
@@ -59,7 +62,7 @@ namespace NaiveBayesianClassifier
                         Dictionary<string, int> wordsInCategory = new Dictionary<string, int>();
                         string[] files = Directory.GetFiles(categories[t]);
 
-                        for (int q = 0; q < 20; q++)
+                        for (int q = 0; q < files.Length; q++)
                         {
                             string analyzed = dataAnalyzer.Analyze(files[q], data);
                             if (analyzed.Contains(strippedCategories[t]))
@@ -68,10 +71,14 @@ namespace NaiveBayesianClassifier
                                 analyzedWrong++;
                             //Console.WriteLine(strippedCategories[t] + " document analyzed as: " + analyzed);
                         }
+                        correct += analyzedCorrectly;
+                        wrong += analyzedWrong;
                         Console.WriteLine("Out of " + (analyzedWrong + analyzedCorrectly) + " documents in " + strippedCategories[t] + ".");
                         Console.WriteLine(analyzedCorrectly + " were correctly classified.");
                         Console.WriteLine(analyzedWrong + " were wrongly classified.");
                     }
+                    float percent = ((correct/(correct + wrong)) * 100.0f);
+                    Console.WriteLine("Correctly classified: " + correct + " of " + (correct+wrong) + " - " + percent + "%");
                 }
                 else
                     Console.WriteLine(dataAnalyzer.Analyze(command, data));
