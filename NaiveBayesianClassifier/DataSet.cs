@@ -33,8 +33,8 @@ namespace NaiveBayesianClassifier
             get { return categoryDocumentCount; }
         }
 
-        List<string> vocabulary = new List<string>();
-        public List<string> Vocabulary
+        Dictionary<string, int> vocabulary = new Dictionary<string, int>();
+        public Dictionary<string, int> Vocabulary
         {
             get { return vocabulary; }
         }
@@ -72,10 +72,14 @@ namespace NaiveBayesianClassifier
                 // Set number of documents for each category.
                 categoryDocumentCount[strippedCategories[t]] = files.Count();
                 categoryWordcount[strippedCategories[t]] = 0;
-
+                List<string[]> fileContents = new List<string[]>();
                 foreach (string filePath in files)
                 {
-                    wordsInCategory = ReturnWordCountFromFile(filePath, wordsInCategory);
+                    fileContents.Add(File.ReadAllLines(filePath));
+                }
+                foreach(string[] content in fileContents)
+                {
+                    wordsInCategory = ReturnWordCountFromFileContent(content, wordsInCategory);
                 }
 
                 foreach (KeyValuePair<string, int> pair in wordsInCategory)
@@ -86,19 +90,27 @@ namespace NaiveBayesianClassifier
                 dataSet[strippedCategories[t]] = wordsInCategory;
             }
 
+            Console.WriteLine("Generating vocab by function.");
+            GenerateVocabulary();
+            Console.WriteLine("Done generating vocab by function.");
+
             initialized = true;
             return dataSet;
         }
 
         // Reads words in a file and adds the count to an existing dictionary.
-        public Dictionary<string, int> ReturnWordCountFromFile(string filePath, Dictionary<string, int> addToDictionary)
+        public Dictionary<string, int> ReturnWordCountFromFilePath(string filePath, Dictionary<string, int> addToDictionary)
         {
-            string fileContent = File.ReadAllText(filePath).ToLower();
+            string[] fileContent = File.ReadAllLines(filePath);
+            List<string> wordsInFile = new List<string>();
 
-            Regex rgx = new Regex("[^a-zA-Z0-9-]");
-            fileContent = rgx.Replace(fileContent, ".");
-            string[] wordsInFile = fileContent.Split('.');
-
+            char[] delimiters = new char[] { '\r', '\n', ' ' };
+            foreach (string line in fileContent)
+            {
+                string[] list = line.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+                foreach (string w in list)
+                    wordsInFile.Add(w.ToLower());
+            }
             foreach (string word in wordsInFile)
             {
                 if (addToDictionary.ContainsKey(word))
@@ -108,12 +120,12 @@ namespace NaiveBayesianClassifier
                 else
                 {
                     addToDictionary[word] = 1;
-                    if (!vocabulary.Contains(word) && word != "")
+                    /*if (!vocabulary.Contains(word) && word != "")
                     {
                         vocabulary.Add(word);
                         if (vocabulary.Count % 10000 == 0)
                             Console.WriteLine("Vocabulary size: " + vocabulary.Count);
-                    }
+                    }*/
                 }
 
 
@@ -127,6 +139,61 @@ namespace NaiveBayesianClassifier
             return addToDictionary;
         }
 
+        public Dictionary<string, int> ReturnWordCountFromFileContent(string[] fileContent, Dictionary<string, int> addToDictionary)
+        {
+            List<string> wordsInFile = new List<string>();
 
+            char[] delimiters = new char[] { '\r', '\n', ' ' };
+            foreach (string line in fileContent)
+            {
+                string[] list = line.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+                foreach (string w in list)
+                    wordsInFile.Add(w.ToLower());
+            }
+            
+
+
+            foreach (string word in wordsInFile)
+            {
+                if (addToDictionary.ContainsKey(word))
+                {
+                    addToDictionary[word] = addToDictionary[word] + 1;
+                }
+                else
+                {
+                    addToDictionary[word] = 1;
+                    /*
+                    if (!vocabulary.Contains(word) && word != "")
+                    {
+                        vocabulary.Add(word);
+                        if (vocabulary.Count % 10000 == 0)
+                            Console.WriteLine("Vocabulary size: " + vocabulary.Count);
+                    }*/
+                }
+
+
+            }
+
+            if (addToDictionary.ContainsKey(""))
+            {
+                addToDictionary.Remove("");
+            }
+
+            return addToDictionary;
+        }
+
+        public void GenerateVocabulary()
+        {
+            foreach (KeyValuePair<string, Dictionary<string, int>> keyPair in dataSet)
+            {
+                foreach (KeyValuePair<string, int> sPair in keyPair.Value)
+                {
+                    if (!vocabulary.ContainsKey(sPair.Key))
+                    {
+                        vocabulary[sPair.Key] = 0;
+                    }
+                }
+            }
+        }
     }
 }
