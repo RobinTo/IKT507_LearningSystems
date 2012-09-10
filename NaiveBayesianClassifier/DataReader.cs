@@ -9,43 +9,9 @@ namespace NaiveBayesianClassifier
 {
     class DataReader
     {
-        public static Dictionary<string, Dictionary<string, int>> ReadFiles()
+
+        public static Dictionary<string, int> ReturnWordCountFromFileContent(string[] fileContent, Dictionary<string, int> addToDictionary)
         {
-            Dictionary<string, Dictionary<string, int>> dataSet = new Dictionary<string, Dictionary<string, int>>();
-
-
-            string[] categories = Directory.GetDirectories(Directory.GetCurrentDirectory() + "..\\..\\..\\20_newsgroups");
-            string[] strippedCategories = new string[categories.Length];
-
-            int i = 0;
-            foreach (string category in categories)
-            {
-                string strippedCategory = category.Substring(category.LastIndexOf('\\') + 1, category.Length - 1 - category.LastIndexOf('\\'));
-                strippedCategories[i] = strippedCategory;
-                i++;
-            }
-
-            for (int t = 0; t < categories.Length; t++)
-            {
-                Dictionary<string, int> wordsInCategory = new Dictionary<string, int>();
-                string[] files = Directory.GetFiles(categories[t]);
-
-                foreach (string filePath in files)
-                {
-                    wordsInCategory = ReturnWordCountFromFile(filePath, wordsInCategory);
-                }
-
-                dataSet[strippedCategories[t]] = wordsInCategory;
-            }
-
-
-            return dataSet;
-        }
-
-        // Reads words in a file and adds the count to an existing dictionary.
-        public static Dictionary<string, int> ReturnWordCountFromFile(string filePath, Dictionary<string, int> addToDictionary)
-        {
-            string[] fileContent = File.ReadAllLines(filePath);
             List<string> wordsInFile = new List<string>();
 
             char[] delimiters = new char[] { '\r', '\n', ' ' };
@@ -76,37 +42,13 @@ namespace NaiveBayesianClassifier
             return addToDictionary;
         }
 
-        // Same as previous function, except it starts with an empty dictionary.
+        // Used to read just a single file and create a single dictionary.
         public static Dictionary<string, int> ReturnWordCountFromFile(string filePath)
         {
             Dictionary<string, int> wordsInCategory = new Dictionary<string, int>();
-            string[] fileContent = File.ReadAllLines(filePath);
-            List<string> wordsInFile = new List<string>();
             
-            char[] delimiters = new char[] { '\r', '\n', ' ' };
-            foreach (string line in fileContent)
-            {
-                string[] list = line.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-                foreach (string w in list)
-                    wordsInFile.Add(w.ToLower());
-            }
-
-            foreach (string word in wordsInFile)
-            {
-                if (wordsInCategory.ContainsKey(word))
-                {
-                    wordsInCategory[word] = wordsInCategory[word] + 1;
-                }
-                else
-                {
-                    wordsInCategory[word] = 1;
-                }
-            }
-
-            if (wordsInCategory.ContainsKey(""))
-            {
-                wordsInCategory.Remove("");
-            }
+            string[] fileContent = File.ReadAllLines(filePath);
+            wordsInCategory = ReturnWordCountFromFileContent(fileContent, wordsInCategory);
 
             return wordsInCategory;
         }

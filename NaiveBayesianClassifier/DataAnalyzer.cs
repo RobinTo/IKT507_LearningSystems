@@ -10,6 +10,7 @@ namespace NaiveBayesianClassifier
     {
         Dictionary<string, Dictionary<string, double>> categoryWithWWL = new Dictionary<string, Dictionary<string, double>>();
 
+        // Calculates each words likelyhood and saves it for analyzis of multiple files, speeds up analyzing many files greatly.
         public void calcCWWWL(DataSet dataset)
         {
 
