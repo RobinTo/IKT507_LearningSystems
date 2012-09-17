@@ -20,9 +20,13 @@ namespace NaiveBayesianClassifier
             DateTime end = DateTime.Now;
             TimeSpan duration = end - start;
 
-            Console.WriteLine("Dataset created in {0} seconds.", String.Format("{0:0.00}", duration.TotalSeconds));
+            Console.WriteLine("Dataset created in " + String.Format("{0:0.00}", duration.TotalSeconds) + " seconds.");
             Console.WriteLine("Calculating P(w|h) for each word in each category using given dataset.");
             DataAnalyzer dataAnalyzer = new DataAnalyzer();
+
+            // Calculates the Word with likelyhood dictionary
+            // Much faster than doing it once each document.
+            // Must be recalculated to reflect changes if training set is altered.
             dataAnalyzer.calcCWWWL(data);
 
             Console.Clear();
