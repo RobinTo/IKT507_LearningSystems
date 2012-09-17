@@ -46,6 +46,7 @@ namespace NaiveBayesianClassifier
                     case "analyzeall":
                         {
                             Console.Clear();
+                            AnalyzeAll(dataAnalyzer, data);
                             break;
                         }
                     case "analyze":
@@ -106,7 +107,7 @@ namespace NaiveBayesianClassifier
                 Dictionary<string, int> wordsInCategory = new Dictionary<string, int>();
                 string[] files = Directory.GetFiles(categories[t]);
 
-                for (int q = 0; q < files.Length; q++)
+                for (int q = files.Length - 300; q < files.Length; q++)
                 {
                     string analyzed = dataAnalyzer.Analyze(files[q], data);
                     if (analyzed.Contains(strippedCategories[t]))

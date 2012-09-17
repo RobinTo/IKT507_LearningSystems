@@ -76,9 +76,9 @@ namespace NaiveBayesianClassifier
                 categoryDocumentCount[strippedCategories[t]] = files.Count();
                 categoryWordcount[strippedCategories[t]] = 0;
                 List<string[]> fileContents = new List<string[]>();
-                foreach (string filePath in files)
+                for (int f = 0; f < files.Length - 300; f++)
                 {
-                    fileContents.Add(File.ReadAllLines(filePath));
+                    fileContents.Add(File.ReadAllLines(files[f]));
                 }
                 foreach(string[] content in fileContents)
                 {
