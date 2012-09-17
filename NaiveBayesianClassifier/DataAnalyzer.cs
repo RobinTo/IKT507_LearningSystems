@@ -8,6 +8,29 @@ namespace NaiveBayesianClassifier
 {
     class DataAnalyzer
     {
+        Dictionary<string, Dictionary<string, double>> categoryWithWWL = new Dictionary<string, Dictionary<string, double>>();
+
+        // Calculates each words likelyhood and saves it for analyzis of multiple files, speeds up analyzing many files greatly.
+        public void calcCWWWL(DataSet dataset)
+        {
+
+            Dictionary<string, int> vocabulary = dataset.Vocabulary;
+            foreach (KeyValuePair<string, Dictionary<string, int>> categoryWords in dataset.getDataSet)
+            {
+                Dictionary<string, int> categoryWithDocumentCount = dataset.CategoryDocumentCount;
+                Dictionary<string, double> wordWithLikelyhood = new Dictionary<string, double>();
+
+                foreach (KeyValuePair<string, int> w in vocabulary)
+                {
+                    if (categoryWords.Value.ContainsKey(w.Key))
+                        wordWithLikelyhood[w.Key] = (categoryWords.Value[w.Key] + 1.0) / (dataset.CategoryWordcount[categoryWords.Key] + vocabulary.Count);
+                    else
+                        wordWithLikelyhood[w.Key] = (1.0) / (dataset.CategoryWordcount[categoryWords.Key] + vocabulary.Count);
+                }
+                categoryWithWWL[categoryWords.Key] = wordWithLikelyhood;
+            }
+        }
+
         public string Analyze(String filename, DataSet dataSet)
         {
             // Fetch file, parse it and wordify it as a Dictionary
@@ -22,7 +45,7 @@ namespace NaiveBayesianClassifier
         private String CalculateCategory(Dictionary<string, int> candidateDocument, DataSet dataset)
         {
             // Vocabulary <- All distinct words in aall documents.
-            List<string> vocabulary = dataset.Vocabulary;
+            Dictionary<string, int> vocabulary = dataset.Vocabulary;
             Dictionary<string, double> highestEffect = new Dictionary<string, double>();
 
             double pH = 0;
@@ -34,13 +57,7 @@ namespace NaiveBayesianClassifier
                 pH = (double)categoryWithDocumentCount[categoryWords.Key] / (double)dataset.documentCount;
                 Dictionary<string, double> wordWithLikelyhood = new Dictionary<string, double>();
 
-                foreach (string w in vocabulary)
-                {
-                    if (categoryWords.Value.ContainsKey(w))
-                        wordWithLikelyhood[w] = (categoryWords.Value[w] + 1.0) / (dataset.CategoryWordcount[categoryWords.Key] + vocabulary.Count);
-                    else
-                        wordWithLikelyhood[w] = (1.0) / (dataset.CategoryWordcount[categoryWords.Key] + vocabulary.Count);
-                }
+                wordWithLikelyhood = categoryWithWWL[categoryWords.Key];
 
 
                 //Finds group with max P(O | H) * P(H)
@@ -49,7 +66,7 @@ namespace NaiveBayesianClassifier
                 double p = 0;
                 foreach (KeyValuePair<string, int> wordPair in candidateDocument)
                 {
-                    if (vocabulary.Contains(wordPair.Key))
+                    if (vocabulary.ContainsKey(wordPair.Key))
                     {
 
                         p += Math.Log(wordPair.Value * (wordWithLikelyhood[wordPair.Key]));
